@@ -8,9 +8,9 @@ export default defineConfig({
   theme: {
     extend: {
       colors: {
-        teal: {
-          100: "#096",
-        },
+        "main-bg-color": "#e8eefb",
+        "dark-bg-color": "#1e2462",
+        "dark-audio-color": "#3663bf",
       },
     },
   },

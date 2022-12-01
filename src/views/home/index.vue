@@ -7,7 +7,7 @@
           <img class="w-full" :src="item.img" />
           <div
             class="absolute left-1/2 top-1/2"
-            @click="() => audio.setAudioInfo(item)"
+            @click="handleAudioButtonClick(item)"
           >
             <Icon
               :name="
@@ -37,13 +37,15 @@
     <home-title title="Popular of this week"></home-title>
 
     <div class="relative h-50">
-      <div class="bg-blue-400 absolute w-full p-6 h-50 rounded-lg">
+      <div
+        class="bg-blue-400 absolute w-full p-6 h-50 rounded-lg dark:from-dark-audio-color dark:to-blue-400 dark:bg-gradient-to-r"
+      >
         <!-- 头像 -->
         <div class="flex items-center text-white">
           <div class="pr-4">
             <img
               class="w-20 rounded"
-              src="https://p2.music.126.net/D5gCZTKvskVjCrhm80y3jg==/231996953481910.jpg?param=300y300"
+              src="https://p2.music.126.net/D5gCZTKvskVjCrhm80y3jg==/231996953481910.jpg"
             />
           </div>
           <div>
@@ -56,8 +58,19 @@
         <div
           class="bg-light-100 bg-opacity-35 py-7 px-6 text-white rounded-lg mt-5 flex justify-between"
         >
-          <div class="flex items-center">
-            <Icon name="play" button type="blue" />
+          <div
+            class="flex items-center"
+            @click="handleAudioButtonClick(misicList[0])"
+          >
+            <Icon
+              :name="
+                audio.audioInfo.name === misicList[0].name && audio.playing
+                  ? 'pause'
+                  : 'play'
+              "
+              button
+              type="blue"
+            />
             <div class="text-xs pl-2">210</div>
           </div>
           <div class="flex items-center">
@@ -79,18 +92,23 @@
 
     <div
       class="flex justify-between items-center mb-3"
-      v-for="item in 10"
-      :key="item"
+      data-aos="fade-right"
+      v-for="(item, index) in misicList"
+      :key="index"
     >
-      <div class="flex items-center">
+      <div class="flex items-center" @click="handleAudioButtonClick(item)">
         <Icon
           class="w-12 h-12 flex items-center justify-center border border-light-200 rounded-md mr-2 bg-blue-100"
-          name="play"
           type="blue"
+          :name="
+            audio.audioInfo.name === item.name && audio.playing
+              ? 'pause'
+              : 'play'
+          "
         />
         <div>
-          <div class="text-sm font-bold">Hotline Bling</div>
-          <div class="text-xs">1320 thimes listen</div>
+          <div class="text-sm font-bold">{{ item.name }}</div>
+          <div class="text-xs">{{ item.author }}</div>
         </div>
       </div>
       <div class="flex items-center">
@@ -110,36 +128,64 @@ const audio = useAudioStore()
 
 const misicList = [
   {
+    name: "Phoenix",
+    author: "Cailin Russo / Chrissy Costanza",
+    img: "http://p2.music.126.net/1tZtqGjkGX_gzlmE375oUg==/109951164419356768.jpg",
+    url: "8",
+  },
+  {
+    name: "RISE",
+    author: "The Glitch Mob / Mako / The Word Alive",
+    img: "http://p1.music.126.net/XLulJwVbfowNQhATCt809g==/109951163573081067.jpg",
+    url: "7",
+  },
+  {
+    name: "Legends Never Die",
+    author: "Against the Current",
+    img: "http://p1.music.126.net/2aTrg-Zz72Ms6ySsjPcKCg==/109951163918904060.jpg",
+    url: "6",
+  },
+  {
     name: "真的汉子",
     author: "林子祥",
-    img: "	https://p1.music.126.net/NIQOMgqgxpHvFcMWc78peQ==/109951163624549722.jpg?param=130y130",
+    img: "	https://p1.music.126.net/NIQOMgqgxpHvFcMWc78peQ==/109951163624549722.jpg",
     url: "5",
   },
   {
     name: "Perfect",
     author: "Ed Sheeran",
-    img: "	https://p2.music.126.net/99_i681E6ZE74t_xue6PUA==/109951166151204092.jpg?param=130y130",
+    img: "	https://p2.music.126.net/99_i681E6ZE74t_xue6PUA==/109951166151204092.jpg",
     url: "1",
   },
   {
     name: "STAY",
     author: "The Kid LAROI / Justin Bieber",
-    img: "https://p1.music.126.net/e5cvcdgeosDKTDrkTfZXnQ==/109951166155165682.jpg?param=130y130",
+    img: "https://p1.music.126.net/e5cvcdgeosDKTDrkTfZXnQ==/109951166155165682.jpg",
     url: "2",
   },
   {
     name: "Love Is Gone (Acoustic)",
     author: "SLANDER / Dylan Matthew",
-    img: "	https://p2.music.126.net/E5JYsO4DR4_Y-CdidpUVCw==/109951164473460772.jpg?param=130y130",
+    img: "	https://p2.music.126.net/E5JYsO4DR4_Y-CdidpUVCw==/109951164473460772.jpg",
     url: "3",
   },
   {
     name: "Lot To Learn",
     author: "Luke Christopher",
-    img: "https://p1.music.126.net/fRdoSIsWoXhM1sQceQwwVQ==/1387583681649679.jpg?param=130y130",
+    img: "https://p1.music.126.net/fRdoSIsWoXhM1sQceQwwVQ==/1387583681649679.jpg",
     url: "4",
   },
 ]
-</script>
 
-<style></style>
+const handleAudioButtonClick = (info: any) => {
+  if (!audio.playing) {
+    audio.setAudioInfo(info)
+  } else {
+    if (audio.audioInfo.name !== info.name) {
+      audio.setAudioInfo(info)
+    } else {
+      audio.pause()
+    }
+  }
+}
+</script>

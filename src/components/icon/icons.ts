@@ -5,8 +5,9 @@ interface Icons {
 export default {
   left: "&#xe8ef;",
   top: "&#xe76e;",
-  message: "&#xe8be;",
+  bottom: "&#xe6b9;",
   right: "&#xe60b;",
+  message: "&#xe8be;",
   search: "&#xe622;",
   next: "&#xe63e;",
   prev: "&#xe63c;",

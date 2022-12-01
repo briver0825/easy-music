@@ -1,4 +1,9 @@
 import { createPinia, defineStore } from "pinia"
+import { useLocalStorage } from "@vueuse/core"
+
+import { useRouter } from "vue-router"
+
+const router = useRouter() 
 
 export default createPinia()
 
@@ -7,12 +12,12 @@ export const useAudioStore = defineStore("audio", {
     return {
       el: null as any,
       playing: false,
-      audioInfo: {
+      audioInfo: useLocalStorage("audioInfo", {
         name: "",
         author: "",
         img: "",
         url: "",
-      },
+      }),
     }
   },
   actions: {
@@ -42,6 +47,33 @@ export const useAudioStore = defineStore("audio", {
       } else {
         this.play()
       }
+    },
+  },
+})
+
+export const useGlobalStore = defineStore("global", {
+  state() {
+    return {
+      fullPath: "",
+      isDarkTheme: useLocalStorage("themeMode", false), 
+    }
+  },
+  actions: {
+    setFullPath(fullPath: string) {
+      this.fullPath = fullPath
+    },
+    toggleThemeMode() {
+      this.isDarkTheme = !this.isDarkTheme
+      if (this.isDarkTheme) {
+        document.documentElement.classList.add("dark")
+      } else {
+        document.documentElement.classList.remove("dark")
+      }
+    },
+  },
+  getters: {
+    isSongsPage(): boolean {
+      return this.fullPath === "/songs"
     },
   },
 })

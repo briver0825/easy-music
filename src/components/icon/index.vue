@@ -3,6 +3,7 @@
     <i
       class="iconfont"
       :class="[button && 'bg-gray-50 shadow p-1.5 rounded', textColorClassName]"
+      :style="size && `font-size: ${size};`"
       v-html="icons[name]"
     ></i>
   </div>
@@ -25,6 +26,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  size: {
+    type: String,
+    default: "",
+  },
 })
 
 const textColor: any = {
@@ -37,6 +42,7 @@ const textColor: any = {
   pink: "text-pink-400",
   orange: "text-orange-400",
   teal: "text-teal-400",
+  white: "text-white",
 }
 
 const textColorClassName = computed(() => {
